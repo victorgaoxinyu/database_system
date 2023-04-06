@@ -150,4 +150,12 @@ Three kinds of relations:
 `SQL CREATE TABLE`
 
 
+# Temp Note
+- skip t
+- functional dependencies - 3.3.3 BCNF - 3.5 Third Normal Form
+  - BCNF too verbose
+  - TNF easier 
+- The entire chapt 4, skip UML and ODL
+- Skip chapt 5, theoretical understanding 
+- chapt 6, SQL usage.
 
