@@ -310,6 +310,115 @@ WHERE salary + allowance = 25000;
 
 
 
+### SQL Comparison operators
+
+```sql
+SELECT * FROM employee WHERE salary = 18000;
+SELECT * FROM employee WHERE salary <= 24000;
+# Not equal
+SELECT * FROM employee WHERE salary <> 24000;
+```
+
+```
+=, <>, != , >, >=, <, <=, !<, !>
+```
+
+### SQL Logical operators
+
+```sql
+ALL, AND, ANY, BETWEEN, EXISTS, IN, LIKE, NOT, OR, IS NULL, UNIQUE
+```
+
+
+
+## Sorting and filtering data
+
+### ORDER BY clause
+
+```sql
+SELECT col1, col2, col3...
+FROM table_name
+ORDER BY col_name ASC | DESC;
+# multiple cols
+SELECT col1, col2
+FROM table_name
+ORDER BY col_name ASC, col_name DESC;
+```
+
+- Numeric -> sort in numerical order
+- String -> sort in alphabetical order
+
+```sql
+SELECT ID, first_name, last_name, nationality
+FROM student_tbl;
+ORDER BY nationality ASC;
+```
+
+ASC by default, 
+
+### WHERE Clause
+
+
+
+```sql
+SELECT col1, col2, ...
+FROM table_name
+WHERE student_id=01
+# string
+...
+WHERE student_id = 'John'
+```
+
+```sql
+SELECT *
+FROM student_tbl
+WHERE faculty = 'Engineering';
+
+# between
+SELECT *
+FROM student_tbl
+WHERE date_of_birth BETWEEN '2010-01-01' AND '2020-06-30'
+
+# like, pattern
+SELECT *
+FROM student_tbl
+WHERE faculty LIKE 'Sc%';
+
+# in, option
+SELECT *
+FROM student_tbl
+WHERE country IN ('USA', 'UK')
+```
+
+
+
+### Lab: ORDERBY and WHERE
+
+```sql
+SHOW COLUMNS FROM Customer;
+
+SELECT * FROM Customer ORDER BY FirstName;
+
+SELECT * 
+FROM Customer  
+WHERE Country = "Canada" 
+ORDER BY FirstName; 
+```
+
+### SELECT DISTINCT clause
+
+```sql
+SELECT DISTINCT country
+FROM student_tbl;
+```
+
+DISTINCT clause consider NULL as unique as well
+
+```sql
+SELECT COUNT(DISTINCT country)
+FROM customer;
+```
+
 
 
 
