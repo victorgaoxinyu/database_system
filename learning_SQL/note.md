@@ -421,6 +421,148 @@ FROM customer;
 
 
 
+## Wk4 Designing the database schema
+
+### Database schema
+
+- **Orgranization** of data in the form of tables
+- The **Relationships** between the tables
+
+Schema objects
+
+- tables
+- columns
+- relationships
+- datatypes
+- keys
+
+
+
+### Exploring database schema
+
+conceptual or logical schema
+
+- Entity Relationship Diagram (ER-D) is usually drawn to represent the logical schema
+- details about physical storage and retrieval of data are hidden
+
+internal or physical chema
+
+- low level
+- how the data is really stored on disk
+
+external or view schema
+
+- for user who would want to see
+
+
+
+```
+External/View Schema          External Level      External Level
+                                       \                 /
+Conceptural/Logical Schema              Conceptural Level
+                                                |
+Internal/Physical Schema                  Internal Level
+												|
+											Database
+```
+
+### Schema in use
+
+```sql
+CREATE TABLE customer(
+	customer_id INT,
+	name VARCHAR(100),
+	address VARCHAR(255),
+	email VARCHAR(100),
+	phone VARCHAR(10),
+	PRIMARY KEY (customer_id)
+);
+
+CREATE TABLE product (
+	product_id INT,
+    name VARCHAR(100),
+    price NUMERIC(8,2),
+    description VARCHAR(255),
+    PRIMARY KEY (product_id)
+);
+
+CREATE TABLE cart_order (
+	order_id INT,
+    customer_id, INT,
+    product_id INT,
+    quantity INT,
+    order_date DATE,
+    status VARCHAR(100),
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
+    FOREIGN KEY (product_id) REFERENCES product (product_id),
+);
+
+```
+
+### PRIMARY KEY and FOREIGN KEY
+
+### Building a schema
+
+Schema objects:
+
+minimum
+
+- tables
+- columns
+- relationships 
+
+Additional
+
+- datatypes
+- views
+- stored procedures
+- primary/foreign keys
+
+
+
+### Table Relationships
+
+- one to many
+- one to one
+- many to many
+
+```
+           one           many
+                              /
+|Student|------ Enrolled ------ Course
+                              \ 
+```
+
+### Relational model
+
+rows and columns
+
+- row -> record -> tuple
+- col -> field -> attr
+
+Domain
+
+- is a set of acceptable values that col is allowed to contain
+
+
+
+### Keys in depth
+
+```sql
+...
+ALTER TABLE vehicle ADD PRIMARY KEY (vehicleID);
+...
+ALTER TABLE vehicle ADD FOREIGN KEY (ownerID) REFERENCES owner (ownerID);
+
+```
+
+three possible values for the keys
+
+- PRI
+- UNI, unique
+- MUL, multiple, the related col is permitted to contain the same value in multiple cells.
+
 
 
 
