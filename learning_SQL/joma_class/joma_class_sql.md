@@ -217,5 +217,154 @@ GROUP BY
   1
 ```
 
+### JOIN ON
+- The importance of separate tables
+
+```sql
+SELECT id, SUM(payment) AS revenue
+FROM food.fast_food a
+JOIN food.transaction b
+  ON a.id = b.restaurant_id
+GROUP BY 1
+```
+
+```sql
+select *
+from tutorial.excel_sql_inventory_data a
+join tutorial.excel_sql_transaction_data b
+on a.product_id = b.product_id 
+```
+
+### INNER/LEFT/RIGHT/OUTER JOIN
+- by default JOIN is INNER JOIN
 
 
+### JOIN Practice
+```sql
+select count(DISTINCT user_id) from tutorial.playbook_users
+```
+- Using DISTINCT is slower than join
+
+```sql
+select * from tutorial.playbook_users a
+left join tutorial.playbook_events b
+on a.user_id = b.user_id and b.event_name = 'login'
+
+-- is different from
+select * from tutorial.playbook_users a
+left join tutorial.playbook_events b
+on a.user_id = b.user_id 
+where event_name = 'login'  -- this will lose the purpose of left join
+```
+```sql
+select count(DISTINCT b.user_id)*1.0 / COUNT(DISTINCT a.user_id) from tutorial.playbook_users a
+left join tutorial.playbook_events b
+on a.user_id = b.user_id and b.event_name = 'login'
+```
+
+```sql
+SELECT
+  num_logins,
+  count(*) AS num_users
+FROM
+  (
+    SELECT
+      a.user_id,
+      count(b.event_name) AS num_logins
+    FROM
+      tutorial.playbook_users a
+      LEFT JOIN tutorial.playbook_events b ON a.user_id = b.user_id
+      AND b.event_name = 'login'
+    GROUP BY
+      1
+  ) table1
+GROUP BY
+  1
+
+```
+
+### WINDOW Function
+- cumulative sum, running sum, rolling total
+
+```sql
+/* rolling sum */
+SUM(minutes_meditated) OVER (ORDER BY timestamp) AS agg_minutes_medidated
+
+/* by person_id */
+SUM(minutes_meditated) OVER (PARTITION BY person_id ORDER BY timestamp) AS running_total
+```
+
+```sql
+select * from 
+(SELECT
+  company_category_code,
+  company_name,
+  investor_name,
+  raised_amount_usd,
+  ROW_NUMBER() over (PARTITION by company_category_code order by raised_amount_usd desc) as rank
+FROM
+  tutorial.crunchbase_investments
+where raised_amount_usd is not NULL
+ORDER by company_category_code, raised_amount_usd DESC) ranking_table
+where rank <= 5
+```
+
+```sql
+select *,
+sum(amount_usd) over (PARTITION by account_id order by occurred_at) as running_sum
+from tutorial.orders
+```
+Create a pareto chart
+
+```sql
+SELECT
+  ranking * 1.0 / total_accounts AS percent_accounts,
+  running_sum / total_sum AS percent_revenue
+FROM
+  (
+    SELECT
+      *,
+      sum(total_usd) over(
+        ORDER BY
+          total_usd DESC
+      ) AS running_sum,
+      sum(total_usd) over() total_sum,
+      count(account_id) over () AS total_accounts,
+      ROW_NUMBER() over (
+        ORDER BY
+          total_usd DESC
+      ) AS ranking
+    FROM
+      (
+        SELECT
+          account_id,
+          sum(amount_usd) AS total_usd
+        FROM
+          tutorial.orders
+        GROUP BY
+          1
+      ) t
+    ORDER BY
+      total_usd DESC
+  ) f
+```
+
+### Everything Else
+```sql
+CAST(user_id AS STRING)
+CAST(user_id AS INT)
+
+-- DATE and TIMESTAMP
+TIMESTAMP
+DATE
+DATETIME
+UNIX_TIMESTAMP(DATETIME)
+CAST(DATE AS DATETIME)
+
+
+-- STRING manipulation
+CONCAT: Concatenate two or more strings into a single string
+LENGTH: Get a length of a string
+SUBSTRING: Extract a substring starting from a position with a specific length
+TRIM: Remove unwanted characters from as string
+LOWER/UPPER: 
